@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# java runtime decompiler launch script
+
+# JPackage Project <http://www.jpackage.org/>
+# Source functions library
+
+. /usr/share/java-utils/java-functions
+
+# identify directory tree
+JRD=`basename $0`
+CONF_HOME=$XDG_CONFIG_HOME
+
+
+if  [ "$CONF_HOME" = "" ] ; then 
+  CONF_HOME=$HOME/.config/$JRD
+
+else
+  CONF_HOME=$CONF_HOME/$JRD
+
+fi
+
+LOG_DIR=$CONF_HOME/logs
+
+CONF_DIR=$CONF_HOME/conf
+
+# create directory tree
+PLUGIN_HOME=$CONF_HOME/plugins
+
+mkdir -p $LOG_DIR
+
+mkdir -p $CONF_DIR
+
+mkdir -p $PLUGIN_HOME
+
+: ${MAIN_CLASS:=org.jrd.backend.data.Main}
+
+# set java and jvm arguments
+export _prefer_jre=false
+_set_java_home
+set_jvm
+
+# all dependencies must be on classpath
+set_classpath java-runtime-decompiler rsyntaxtextarea byteman google-gson
+CLASSPATH=$CLASSPATH:${JAVA_HOME}/lib/tools.jar
+
+# set path to agent automatically
+AGENT="/usr/share/java/java-runtime-decompiler/decompiler-agent.jar"
+CONFIG_FILE=$CONF_DIR/config.cfg
+AGENT_STRING="AGENT_PATH===$AGENT"
+
+# copy json wrappers information to home so the users can edit it
+for cpfile in "/etc/$JRD/plugins/*.json"; do
+	if [ ! -e "$PLUGIN_HOME/$cpfile" ]
+	then
+		cp $cpfile $PLUGIN_HOME
+	else
+		echo "Failed to copy configuration files!"
+	fi
+done
+
+# create config file and add agent default path
+touch $CONFIG_FILE
+
+if [ -e $AGENT ]
+then
+	if grep -Fxq $AGENT_STRING $CONFIG_FILE
+	then
+		echo "Agent path is already set in $CONFIG_FILE. Skipping agent path setting."
+	else
+		echo  $AGENT_STRING >> $CONFIG_FILE		
+
+	fi
+else
+	echo "Agent was not found and agent path was not set correctly. This has to be done manually in the decompiler GUI, or set AGENT_PATH===path_to_agent_jar in the configuration file: $CONFIG_FILE"
+fi
+
+run  "$@"
+
