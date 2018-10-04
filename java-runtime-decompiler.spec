@@ -1,10 +1,10 @@
 Summary: Application for extraction of bytecode from running JVM and its decompilation back to source code. 
 Name: java-runtime-decompiler
-Version: 1.0
+Version: 1.1
 Release: 1%{?dist}
 License: GPL
 URL: https://github.com/pmikova/java-runtime-decompiler
-Source0: https://github.com/pmikova/%{name}/archive/%{version}.tar.gz
+Source0: https://github.com/pmikova/%{name}/archive/%{name}-%{version}.tar.gz
 Source1: java-runtime-decompiler
 Source2: java-runtime-decompiler.1
 BuildArch: noarch
@@ -31,7 +31,7 @@ Requires: %{name}
 This package contains the API documentation for %{name}.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{name}-%{version}
 
 %build
 pushd runtime-decompiler
@@ -42,12 +42,12 @@ popd
 
 %install
 %mvn_install
-install -d -m 755 $RPM_BUILD_ROOT%{_mandir}/man1
+install -d -m 755 $RPM_BUILD_ROOT%{_mandir}/man1/
 install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/man1/
 install -d -m 755 $RPM_BUILD_ROOT%{_bindir}
 install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
-cp -r %{_builddir}/%{name}-%{version}/runtime-decompiler/src/plugins/ $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
+cp -r %{_builddir}/%{name}-%{name}-%{version}/runtime-decompiler/src/plugins/ $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
 
 %files -f .mfiles
 %dir %{_javadir}/%{name}
