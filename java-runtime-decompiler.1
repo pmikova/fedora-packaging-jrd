@@ -1,11 +1,26 @@
-.TH java-runtime-decompiler 1 "05 September 2018" "version 1.0.1"
+.TH java-runtime-decompiler 1 "05 September 2018" "version 2.0"
 .SH NAME
 java-runtime-decompiler \- launch java-runtime decompiler GUI
 .SH SYNOPSIS
-java-runtime-decompiler 
+java-runtime-decompiler
 .SH DESCRIPTION
 It is used for extraction of bytecode from running JVM and decompilation of the bytecode with an external decompiler. Paths to the decompiler need to be specified in .json configuration file located in /etc/java-runtime-decompiler
 .SH OPTIONS
-The java runtime decompiler does not take any options. 
+.IP -verbose
+Print out all exceptions and debugging strings in stdout.
+.IP -help
+Print out help and exits.
+.IP -listjvms
+List available local JVMs.
+.IP -listplugins
+List currently configured plugins with their status.
+.IP "-listclasses pid-xor-url"
+List loaded classes from JVM with given PID/URL.
+.IP "-bytes pid class-name"
+Print on stdout binary form of given class loaded in JVM with given PID/URL.
+.IP "-base64bytes pid-xor-url class-name"
+Print on stdout binary form encoded in base64 of given class loaded in JVM with given PID/URL.
+.IP "-decompile pid-xor-url class-name config-file"
+Print on stdout decompiled class, needs PID/URL of JVM, class name and name/file with decompiler configuration, can use javap disassembler. To pass arguments to the disassembler, add them to javap without spaces (e.g. javap-v).
 .SH AUTHOR
 Petra Alice Mikova (petra.alice.mikova@gmail.com)

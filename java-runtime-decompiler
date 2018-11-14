@@ -47,15 +47,18 @@ CLASSPATH=$CLASSPATH:${JAVA_HOME}/lib/tools.jar
 # set path to agent automatically
 AGENT="/usr/share/java/java-runtime-decompiler/decompiler-agent.jar"
 CONFIG_FILE=$CONF_DIR/config.cfg
-AGENT_STRING="AGENT_PATH===$AGENT"
+AGENT_PREFIX="AGENT_PATH==="
+AGENT_STRING=$AGENT_PREFIX$AGENT
 
-# copy json wrappers information to home so the users can edit it
-for cpfile in "/etc/$JRD/plugins/*.json"; do
-	if [ ! -e "$PLUGIN_HOME/$cpfile" ]
+# copy json wrappers information to home so the users can edit
+CP_FILES="$(ls /etc/$JRD/plugins/*.json)"
+for cpfile in $CP_FILES; do
+    FILE_NAME="$(basename -- $cpfile)"
+	if [ ! -e "$PLUGIN_HOME/$FILE_NAME" ]
 	then
 		cp $cpfile $PLUGIN_HOME
 	else
-		echo "Failed to copy configuration files!"
+		echo "Configuration files were not copied for $FILE_NAME - the existing configuration would be overwritten."
 	fi
 done
 
@@ -66,7 +69,11 @@ if [ -e $AGENT ]
 then
 	if grep -Fxq $AGENT_STRING $CONFIG_FILE
 	then
-		echo "Agent path is already set in $CONFIG_FILE. Skipping agent path setting."
+		echo "Default agent path is already set in $CONFIG_FILE. Skipping agent path setting."
+	elif grep -rq $AGENT_PREFIX $CONFIG_FILE
+	then
+		RESULT_OF_GREP="$(grep -rq $AGENT_PREFIX $CONFIG_FILE)"
+		echo "Agent path is already set in $CONFIG_FILE as ${RESULT_OF_GREP}. Skipping agent path setting."
 	else
 		echo  $AGENT_STRING >> $CONFIG_FILE		
 
