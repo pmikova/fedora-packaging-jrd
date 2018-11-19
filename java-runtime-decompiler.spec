@@ -48,13 +48,11 @@ install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
 cp -r %{_builddir}/%{name}-%{name}-%{version}/runtime-decompiler/src/plugins/ $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
 
-
 install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install --vendor="fedora"                     \
 --dir=${RPM_BUILD_ROOT}%{_datadir}/applications %{SOURCE3}
 
 %files -f .mfiles
-%dir %{_javadir}/%{name}
 %attr(755, root, -) %{_bindir}/java-runtime-decompiler
 %{_mandir}/man1/java-runtime-decompiler.1*
 

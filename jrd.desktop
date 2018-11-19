@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
+Categories=Development;Profiling;Java;
 Version=1.0
 Name=Java Runtime Decompiler
 Exec=java-runtime-decompiler
