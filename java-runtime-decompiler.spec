@@ -72,9 +72,9 @@ desktop-file-install --vendor="fedora"                     \
 %license LICENSE
 
 %changelog
-* Wed Nov 14 2018 Petra Mikova <petra.alice.mikova@gmail.com> - 2.0-1
+* Mon Nov 19 2018 Petra Mikova <petra.alice.mikova@gmail.com> - 2.0-1
 - fixed issues listed in review (rhbz#1636019)
 - added installation of desktop file
 
-* Wed Jun 06 2018 Petra Mikova <petra.alice.mikova@gmail.com> 1.1-1
+* Wed Jun 06 2018 Petra Mikova <petra.alice.mikova@gmail.com> - 1.1-1
 - initial commit
